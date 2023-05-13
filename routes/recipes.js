@@ -6,7 +6,8 @@ import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
 const router = Router()
 
 // ========== Public Routes ===========
-router.get('/', recipesCtrl.getRecipeData)
+router.get('/', recipesCtrl.getRecipesData)
+router.get('/:recipeId', recipesCtrl.getRecipe)
 
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
