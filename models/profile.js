@@ -4,7 +4,9 @@ const Schema = mongoose.Schema
 
 const profileSchema = new Schema({
   name: String,
-  photo: String
+  pronouns: String,
+  photo: String,
+  boards: { type: Schema.Types.ObjectId, ref: 'Board' }
 },{
   timestamps: true,
 })
