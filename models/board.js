@@ -7,14 +7,13 @@ const boardSchema = new Schema({
     type: String,
     required: true,
   },
+  author: { type: Schema.Types.ObjectId, ref: 'Profile' },
   bgColor: {
     type: String,
     required: true,
     enum: ['White', 'Gray', 'Cyan', 'Magenta']
   },
-  recipes: {
-    type: String
-  }
+  recipes: [{ type: Schema.Types.ObjectId, ref: 'Recipe' }]
 },{
   timestamps: true,
 })
