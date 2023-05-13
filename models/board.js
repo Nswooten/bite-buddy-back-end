@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
 
-const profileSchema = new Schema({
+const boardSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -19,6 +19,6 @@ const profileSchema = new Schema({
   timestamps: true,
 })
 
-const Profile = mongoose.model('Profile', profileSchema)
+const Board = mongoose.model('Board', boardSchema)
 
-export { Profile }
+export { Board }

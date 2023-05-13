@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import * as blogsCtrl from '../controllers/blogs.js'
+import * as recipesCtrl from '../controllers/recipes.js'
 import { decodeUserFromToken, checkAuth } from '../middleware/auth.js'
 
 const router = Router()
