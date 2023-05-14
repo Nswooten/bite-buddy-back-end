@@ -36,7 +36,25 @@ async function deleteBoard(req, res){
   }
 }
 
+async function update(req, res){
+  try{
+    const board = await Board.findById(req.params.boardId)
+    if (board.author.equals(req.user.profile)) {
+      const updatedBoard = await Board.findByIdAndUpdate(req.params.boardId,
+        req.body, 
+        { new: true })
+      res.status(200).json(updatedBoard)
+    }else{
+      res.status(401).json({msg: "Not Authorized"})
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 export{
   create,
-  deleteBoard as delete
+  deleteBoard as delete,
+  update
 }
