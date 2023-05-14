@@ -53,8 +53,28 @@ async function update(req, res){
   }
 }
 
+async function addRecipeToBoard(req, res){
+  try {
+    const board = await Board.findById(req.params.boardId)
+    const recipe = await Recipe.findOne({foodId: req.body.foodId})
+    if(recipe){
+      board.recipes.unshift(recipe._id)
+      await board.save()
+      res.status(201).json(board)
+    }else{
+      const newRecipe = await Recipe.create(req.body)
+      board.recipes.unshift(newRecipe._id)
+      res.status(201).json(board)
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 export{
   create,
   deleteBoard as delete,
-  update
+  update,
+  addRecipeToBoard
 }
