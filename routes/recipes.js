@@ -14,4 +14,6 @@ router.get('/:recipeId', recipesCtrl.getRecipe)
 router.use(decodeUserFromToken)
 router.post('/:recipeId/comments', checkAuth, recipesCtrl.createComment)
 router.delete('/:recipeId/comments/:commentId', checkAuth, recipesCtrl.deleteComment)
+router.put('/:recipeId/comments/:commentId', checkAuth, recipesCtrl.editComment)
+
 export { router }

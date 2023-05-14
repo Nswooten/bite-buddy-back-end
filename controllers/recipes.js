@@ -59,9 +59,27 @@ async function deleteComment(req, res){
   }
 }
 
+async function editComment(req, res){
+  try{
+    const recipe = await Recipe.findOne({foodId: req.params.recipeId})
+    const comment = recipe.comments.id(req.params.commentId)
+    if (comment.author.equals(req.user.profile)) {
+      Object.assign(comment, req.body)
+      await recipe.save()
+      res.status(200).json(recipe)
+    }else{
+      res.status(401).json({msg: "Not Authorized"})
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 export {
   getRecipesData,
   getRecipe,
   createComment,
   deleteComment,
+  editComment
 }
