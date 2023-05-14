@@ -13,6 +13,5 @@ router.get('/:recipeId', recipesCtrl.getRecipe)
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
 router.post('/:recipeId/comments', checkAuth, recipesCtrl.createComment)
-
-
+router.delete('/:recipeId/comments/:commentId', checkAuth, recipesCtrl.deleteComment)
 export { router }
