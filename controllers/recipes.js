@@ -1,3 +1,4 @@
+import { Profile } from "../models/profile.js"
 import { Recipe } from "../models/recipe.js"
 
 const BASE_URL= "https://api.edamam.com/api/recipes/v2"
@@ -16,21 +17,41 @@ async function getRecipe (req, res) {
   res.json(recipe)
 }
 
-// async function create(req, res) {
-//   try {
-//     const recipe = await Recipe.create(req.body)
-//   } catch (error) {
-//   }
+async function createComment(req, res) {
+  try {
+    req.body.author = req.user.profile
+    const recipes = await Recipe.find({foodId: `${req.params.recipeId}`}).exec()
+    const recipe = recipes[0]
+    if(Object.keys(recipe).length > 0){
+      recipe.comments.push(req.body)
+      await recipe.save()
+      const newComment = recipe.comments[recipe.comments.length -1]
+      const profile = await Profile.findById(req.user.profile)
+      newComment.author = profile
+      res.status(201).json(newComment)
+    }else{
+      const newRecipe = await Recipe.create(req.body)
+      const createdRecipe = await Recipe.findById(newRecipe._id)
+      createdRecipe.comments.push(req.body)
+      await createdRecipe.save()
+      const newComment = createdRecipe.comments[createdRecipe.comments.length -1]
+      const profile = await Profile.findById(req.user.profile)
+      newComment.author = profile
+      res.status(201).json(newComment)
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
 
-// }
+}
 
-// async function createComment(req, res) {
 
-// }
 
 export {
   getRecipesData,
   getRecipe,
+  createComment,
 }
 
 

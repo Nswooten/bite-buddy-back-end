@@ -9,8 +9,10 @@ const router = Router()
 router.get('/', recipesCtrl.getRecipesData)
 router.get('/:recipeId', recipesCtrl.getRecipe)
 
+
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
+router.post('/:recipeId/comments', checkAuth, recipesCtrl.createComment)
 
 
 export { router }
