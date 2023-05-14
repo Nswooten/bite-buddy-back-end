@@ -22,7 +22,11 @@ async function createComment(req, res) {
     req.body.author = req.user.profile
     const recipes = await Recipe.find({foodId: `${req.params.recipeId}`}).exec()
     const recipe = recipes[0]
-    if(Object.keys(recipe).length > 0){
+    console.log(recipes)
+    console.log(recipe)
+    
+    
+    if(Object.keys(recipes).length > 0){
       recipe.comments.push(req.body)
       await recipe.save()
       const newComment = recipe.comments[recipe.comments.length -1]
@@ -43,7 +47,6 @@ async function createComment(req, res) {
     console.log(error)
     res.status(500).json(error)
   }
-
 }
 
 
