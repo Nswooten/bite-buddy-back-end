@@ -13,5 +13,6 @@ router.post('/', checkAuth, boardsCtrl.create)
 
 router.delete('/:boardId', checkAuth, boardsCtrl.delete)
 router.put('/:boardId', checkAuth, boardsCtrl.update)
+router.post('/:boardId/recipes', checkAuth, boardsCtrl.addRecipeToBoard)
 
 export { router }
