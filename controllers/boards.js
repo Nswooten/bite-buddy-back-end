@@ -81,7 +81,9 @@ async function addRecipeToBoard(req, res) {
   try {
     const board = await Board.findById(req.params.boardId)
     const recipe = await Recipe.findOne({ foodId: req.body.foodId })
-    if (recipe) {
+    if (recipe && board.recipes.includes(recipe._id)) {
+      res.status(304).end()
+    }else if (recipe) {
       board.recipes.unshift(recipe._id)
       await board.save()
       const savedBoard = await Board.findById(req.params.boardId).populate("recipes")
@@ -98,6 +100,20 @@ async function addRecipeToBoard(req, res) {
   }
 }
 
+async function removeRecipeFromBoard(req, res) {
+  try {
+    const board = await Board.findById(req.params.boardId)
+    const recipe = await Recipe.findOne({ foodId: req.body.foodId })
+    board.recipes.remove({ _id: req.params.recipeId })
+    await board.save()
+    const savedBoard = await Board.findById(req.params.boardId).populate("recipes")
+    res.status(201).json(savedBoard)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 
 
 export {
@@ -106,5 +122,6 @@ export {
   show,
   deleteBoard as delete,
   update,
-  addRecipeToBoard
+  addRecipeToBoard,
+  removeRecipeFromBoard
 }
