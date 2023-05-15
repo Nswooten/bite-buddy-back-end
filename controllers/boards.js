@@ -19,6 +19,18 @@ async function create(req, res){
   }
 }
 
+async function index(req, res){
+  try {
+    const boards = await Board.find({})
+      .populate("author")
+      .populate("recipes")
+      res.status(200).json(boards)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 async function deleteBoard(req, res){
   try{
     const board = await Board.findById(req.params.boardId)
@@ -60,11 +72,13 @@ async function addRecipeToBoard(req, res){
     if(recipe){
       board.recipes.unshift(recipe._id)
       await board.save()
-      res.status(201).json(board)
+      const savedBoard = await Board.findById(req.params.boardId).populate("recipes")
+      res.status(201).json(savedBoard)
     }else{
       const newRecipe = await Recipe.create(req.body)
       board.recipes.unshift(newRecipe._id)
-      res.status(201).json(board)
+      const savedBoard = await Board.findById(req.params.boardId).populate("recipes")
+      res.status(201).json(savedBoard)
     }
   } catch (error) {
     console.log(error)
@@ -72,8 +86,11 @@ async function addRecipeToBoard(req, res){
   }
 }
 
+
+
 export{
   create,
+  index,
   deleteBoard as delete,
   update,
   addRecipeToBoard

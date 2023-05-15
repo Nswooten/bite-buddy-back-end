@@ -10,7 +10,7 @@ const router = Router()
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
 router.post('/', checkAuth, boardsCtrl.create)
-
+router.get('/index', checkAuth, boardsCtrl.index) 
 router.delete('/:boardId', checkAuth, boardsCtrl.delete)
 router.put('/:boardId', checkAuth, boardsCtrl.update)
 router.post('/:boardId/recipes', checkAuth, boardsCtrl.addRecipeToBoard)
