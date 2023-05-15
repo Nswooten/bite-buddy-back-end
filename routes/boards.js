@@ -15,5 +15,6 @@ router.get('/:boardId', checkAuth, boardsCtrl.show)
 router.delete('/:boardId', checkAuth, boardsCtrl.delete)
 router.put('/:boardId', checkAuth, boardsCtrl.update)
 router.post('/:boardId/recipes', checkAuth, boardsCtrl.addRecipeToBoard)
+router.delete('/:boardId/recipes/:recipeId', checkAuth, boardsCtrl.removeRecipeFromBoard)
 
 export { router }
