@@ -4,8 +4,31 @@ import { v2 as cloudinary } from "cloudinary"
 async function index(req, res) {
   try {
     const profiles = await Profile.find({})
-    .populate("boards")
+    .populate({
+      path: "boards",
+      populate: {
+        path: "recipes",
+        model: "Recipe"
+      }
+    })
     res.json(profiles)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
+async function show(req, res) {
+  try {
+    const profile = await Profile.findById(req.params.profileId)
+    .populate({
+      path: "boards",
+      populate: {
+        path: "recipes",
+        model: "Recipe"
+      }
+    })
+    res.status(200).json(profile)
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
@@ -31,4 +54,8 @@ async function addPhoto(req, res) {
   }
 }
 
-export { index, addPhoto }
+export { 
+  index,
+  show, 
+  addPhoto 
+}
