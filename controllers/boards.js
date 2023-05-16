@@ -18,13 +18,28 @@ async function create(req, res) {
     res.status(500).json(error)
   }
 }
+const BASE_URL= "https://api.edamam.com/api/recipes/v2"
+
+
+async function findRecipeByFoodId (recipeId) {
+  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_API_KEY}`)
+  return await apiResponse.json()
+}
 
 async function index(req, res) {
   try {
     const boards = await Board.find({})
       .populate("author")
       .populate("recipes")
-    res.status(200).json(boards)
+    const boardsWithCover = await Promise.all(boards.map(async(board, idx) => {
+      if(board.recipes.length){        
+        const recipeData = await findRecipeByFoodId(board.recipes[0].foodId)
+        return {...board._doc, thumbnail: recipeData.recipe.images.THUMBNAIL.url}
+      }else{
+        return board
+      }
+    }))    
+    res.status(200).json(boardsWithCover)
   } catch (error) {
     console.log(error)
     res.status(500).json(error)
