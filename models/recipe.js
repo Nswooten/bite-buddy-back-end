@@ -19,11 +19,15 @@ const commentSchema = new Schema(
 
 const recipeSchema = new Schema(
   {
-    name: {
+    label: {
       type: String,
       required: true,
     },
     foodId: {
+      type: String,
+      required: true,
+    },
+    image: {
       type: String,
       required: true,
     },
