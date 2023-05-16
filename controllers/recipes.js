@@ -10,7 +10,7 @@ async function getRecipesData(req, res){
 }
 
 async function getRecipe (req, res) {
-  const recipeId = req.body.recipeId
+  const recipeId = req.params.recipeId
   const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_API_KEY}`)
   const recipe = await apiResponse.json()
   res.json(recipe)
