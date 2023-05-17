@@ -1,6 +1,20 @@
 import { Recipe } from "../models/recipe.js";
 import { Board } from "../models/board.js";
 import { Profile } from "../models/profile.js";
+const BASE_URL= "https://api.edamam.com/api/recipes/v2"
+
+const keyLookUp = {
+  0: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID0, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY0 },
+  1: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID1, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY1 },
+  2: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID2, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY2 },
+  3: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID3, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY3 },
+  4: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID4, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY4 },
+  5: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID5, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY5 },
+  6: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID6, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY6 },
+  7: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID7, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY7 },
+  8: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID8, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY8 },
+  9: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID9, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY9 },
+}
 
 async function create(req, res) {
   try {
@@ -18,11 +32,11 @@ async function create(req, res) {
     res.status(500).json(error)
   }
 }
-const BASE_URL= "https://api.edamam.com/api/recipes/v2"
 
 
-async function findRecipeByFoodId (recipeId) {
-  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_API_KEY}`)
+
+async function findRecipeByFoodId (recipeId, idx) {  
+  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${keyLookUp[idx].EDAMAM_APP_ID}&app_key=${keyLookUp[idx].EDAMAM_API_KEY}`)
   return await apiResponse.json()
 }
 
@@ -31,9 +45,10 @@ async function index(req, res) {
     const boards = await Board.find({})
       .populate("author")
       .populate("recipes")
+      .limit(10)
     const boardsWithCover = await Promise.all(boards.map(async(board, idx) => {
       if(board.recipes.length){        
-        const recipeData = await findRecipeByFoodId(board.recipes[0].foodId)
+        const recipeData = await findRecipeByFoodId(board.recipes[0].foodId, idx)
         return {...board._doc, thumbnail: recipeData.recipe.images.THUMBNAIL.url}
       }else{
         return board
@@ -48,10 +63,14 @@ async function index(req, res) {
 
 async function show(req, res) {
   try {
-    const board = await Board.findById(req.params.boardId)
-      .populate("author")
-      .populate("recipes")
-    res.status(200).json(board)
+    const board = await Board.findById(req.params.boardId).populate("author").populate("recipes")
+    const recipesWithPhotos = board.recipes.length 
+      ? await Promise.all(board.recipes.map(async(recipe, idx) => {
+          const recipeData = await findRecipeByFoodId(board.recipes[idx].foodId, idx)      
+          return {...recipeData.recipe, thumbnail: recipeData.recipe.images.THUMBNAIL.url}
+        }))
+      : []     
+    res.status(200).json({...board._doc, recipes: recipesWithPhotos})
   } catch (error) {
     console.log(error)
     res.status(500).json(error)
@@ -101,11 +120,12 @@ async function addRecipeToBoard(req, res) {
     }else if (recipe) {
       board.recipes.unshift(recipe._id)
       await board.save()
-      const savedBoard = await Board.findById(req.params.boardId).populate("recipes")
+      const savedBoard = await Board.findById(req.params.boardId).populate("recipes")      
       res.status(201).json(savedBoard)
     } else {
       const newRecipe = await Recipe.create(req.body)
       board.recipes.unshift(newRecipe._id)
+      await board.save()
       const savedBoard = await Board.findById(req.params.boardId).populate("recipes")
       res.status(201).json(savedBoard)
     }

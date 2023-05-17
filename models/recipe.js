@@ -27,10 +27,6 @@ const recipeSchema = new Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
     comments: [commentSchema],
   },
   { timestamps: true }
