@@ -17,6 +17,8 @@ async function getRecipe (req, res) {
   res.json(recipe)
 }
 
+
+
 async function createComment(req, res) {
   try {
     req.body.author = req.user.profile
@@ -77,10 +79,25 @@ async function editComment(req, res){
   }
 }
 
+async function getMongoDBRecipe(req, res){
+  try{
+    const recipe = await Recipe.findOne({foodId: req.params.recipeId})
+    if (recipe) {
+      res.status(200).json(recipe)
+    }else{
+      res.status(304).end()
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
 export {
   getRecipesData,
   getRecipe,
   createComment,
   deleteComment,
-  editComment
+  editComment,
+  getMongoDBRecipe
 }
