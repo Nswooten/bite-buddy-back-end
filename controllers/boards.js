@@ -1,6 +1,7 @@
-import { Recipe } from "../models/recipe.js";
-import { Board } from "../models/board.js";
-import { Profile } from "../models/profile.js";
+import { Recipe } from "../models/recipe.js"
+import { Board } from "../models/board.js"
+import { Profile } from "../models/profile.js"
+
 const BASE_URL= "https://api.edamam.com/api/recipes/v2"
 
 const keyLookUp = {
@@ -14,6 +15,11 @@ const keyLookUp = {
   7: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID7, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY7 },
   8: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID8, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY8 },
   9: {EDAMAM_APP_ID: process.env.EDAMAM_APP_ID9, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY9 },
+}
+
+async function findRecipeByFoodId(recipeId, idx) {
+  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${keyLookUp[idx].EDAMAM_APP_ID}&app_key=${keyLookUp[idx].EDAMAM_API_KEY}`)
+  return await apiResponse.json()
 }
 
 async function create(req, res) {
@@ -31,13 +37,6 @@ async function create(req, res) {
     console.log(error)
     res.status(500).json(error)
   }
-}
-
-
-
-async function findRecipeByFoodId (recipeId, idx) {  
-  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${keyLookUp[idx].EDAMAM_APP_ID}&app_key=${keyLookUp[idx].EDAMAM_API_KEY}`)
-  return await apiResponse.json()
 }
 
 async function index(req, res) {
