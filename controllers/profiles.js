@@ -57,12 +57,13 @@ async function show(req, res) {
         return board
       }
     }))
-    res.status(200).json({boardsWithCovers, profile})
-      } catch (err) {
-        console.log(err)
-        res.status(500).json(err)
-      }
+    
+    res.status(200).json({ ...profile._doc, boards: boardsWithCovers})
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
   }
+}
 
 async function addPhoto(req, res) {
     try {
