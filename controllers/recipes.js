@@ -4,14 +4,14 @@ import { Recipe } from "../models/recipe.js"
 const BASE_URL= "https://api.edamam.com/api/recipes/v2"
 
 async function getRecipesData(req, res){
-  const apiResponse = await fetch(`${BASE_URL}?type=public&q=${req.query.q}&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_API_KEY}`)
+  const apiResponse = await fetch(`${BASE_URL}?type=public&q=${req.query.q}&app_id=${process.env.EDAMAM_APP_ID9}&app_key=${process.env.EDAMAM_API_KEY9}`)
   const recipesData = await apiResponse.json()
   res.json(recipesData)
 }
 
 async function getRecipe (req, res) {
   const recipeId = req.params.recipeId
-  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${process.env.EDAMAM_APP_ID}&app_key=${process.env.EDAMAM_API_KEY}`)
+  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${process.env.EDAMAM_APP_ID9}&app_key=${process.env.EDAMAM_API_KEY9}`)
   const recipe = await apiResponse.json()
   res.json(recipe)
 }
