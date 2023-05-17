@@ -8,7 +8,7 @@ const router = Router()
 // ========== Public Routes ===========
 router.get('/', recipesCtrl.getRecipesData)
 router.get('/:recipeId', recipesCtrl.getRecipe)
-
+router.get('/:recipeId/comments', recipesCtrl.getMongoDBRecipe)
 
 // ========= Protected Routes ========= 
 router.use(decodeUserFromToken)
