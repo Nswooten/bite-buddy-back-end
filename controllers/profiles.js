@@ -1,7 +1,7 @@
-import { Profile } from "../models/profile.js"
-import { v2 as cloudinary } from "cloudinary"
+import { Profile } from '../models/profile.js'
+import { v2 as cloudinary } from 'cloudinary'
 
-const BASE_URL = "https://api.edamam.com/api/recipes/v2"
+const BASE_URL = 'https://api.edamam.com/api/recipes/v2'
 
 const keyLookUp = {
   0: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID0, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY0 },
@@ -21,15 +21,14 @@ async function findRecipeByFoodId(recipeId, idx) {
   return await apiResponse.json()
 }
 
-
 async function index(req, res) {
   try {
     const profiles = await Profile.find({})
       .populate({
-        path: "boards",
+        path: 'boards',
         populate: {
-          path: "recipes",
-          model: "Recipe"
+          path: 'recipes',
+          model: 'Recipe'
         }
       })
     res.json(profiles)
@@ -43,22 +42,22 @@ async function show(req, res) {
   try {
     const profile = await Profile.findById(req.params.profileId)
       .populate({
-        path: "boards",
+        path: 'boards',
         populate: {
-          path: "recipes",
-          model: "Recipe"
+          path: 'recipes',
+          model: 'Recipe'
         }
       })
-    const boardsWithCovers = await Promise.all(profile.boards.map(async(board, idx)=>{
-      if(board.recipes.length){
+    const boardsWithCovers = await Promise.all(profile.boards.map(async (board, idx) => {
+      if (board.recipes.length) {
         const recipeData = await findRecipeByFoodId(board.recipes[0].foodId, idx)
-        return {...board._doc, thumbnail: recipeData.recipe.images.THUMBNAIL.url}
-      }else{
+        return { ...board._doc, thumbnail: recipeData.recipe.images.THUMBNAIL.url }
+      } else {
         return board
       }
     }))
-    
-    res.status(200).json({ ...profile._doc, boards: boardsWithCovers})
+
+    res.status(200).json({ ...profile._doc, boards: boardsWithCovers })
   } catch (err) {
     console.log(err)
     res.status(500).json(err)
@@ -66,26 +65,24 @@ async function show(req, res) {
 }
 
 async function addPhoto(req, res) {
-    try {
-      const imageFile = req.files.photo.path
-      const profile = await Profile.findById(req.params.id)
-
-      const image = await cloudinary.uploader.upload(
-        imageFile,
-        { tags: `${req.user.email}` }
-      )
-      profile.photo = image.url
-
-      await profile.save()
-      res.status(201).json(profile.photo)
-    } catch (err) {
-      console.log(err)
-      res.status(500).json(err)
-    }
+  try {
+    const imageFile = req.files.photo.path
+    const profile = await Profile.findById(req.params.id)
+    const image = await cloudinary.uploader.upload(
+      imageFile,
+      { tags: `${req.user.email}` }
+    )
+    profile.photo = image.url
+    await profile.save()
+    res.status(201).json(profile.photo)
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
   }
+}
 
-  export {
-    index,
-    show,
-    addPhoto
-  }
+export {
+  index,
+  show,
+  addPhoto
+}

@@ -1,8 +1,7 @@
-import { Profile } from "../models/profile.js"
-import { Recipe } from "../models/recipe.js"
+import { Profile } from '../models/profile.js'
+import { Recipe } from '../models/recipe.js'
 
-const BASE_URL = "https://api.edamam.com/api/recipes/v2"
-
+const BASE_URL = 'https://api.edamam.com/api/recipes/v2'
 
 async function getRecipesData(req, res) {
   const apiResponse = await fetch(`${BASE_URL}?type=public&q=${req.query.q}&app_id=${process.env.EDAMAM_APP_ID8}&app_key=${process.env.EDAMAM_API_KEY8}`)
@@ -17,11 +16,8 @@ async function getRecipe(req, res) {
   res.json(recipe)
 }
 
-
-
 async function createComment(req, res) {
   try {
-    
     req.body.author = req.user.profile
     const recipe = await Recipe.findOne({ foodId: req.params.recipeId })
     if (recipe) {
@@ -38,8 +34,6 @@ async function createComment(req, res) {
       const newComment = newRecipe.comments[newRecipe.comments.length - 1]
       const profile = await Profile.findById(req.user.profile)
       newComment.author = profile
-    
-      
       res.status(201).json(newComment)
     }
   } catch (error) {
@@ -57,7 +51,7 @@ async function deleteComment(req, res) {
       await recipe.save()
       res.status(200).json(comment)
     } else {
-      res.status(401).json({ msg: "Not Authorized" })
+      res.status(401).json({ msg: 'Not Authorized' })
     }
   } catch (error) {
     console.log(error)
@@ -74,7 +68,7 @@ async function editComment(req, res) {
       await recipe.save()
       res.status(200).json(recipe)
     } else {
-      res.status(401).json({ msg: "Not Authorized" })
+      res.status(401).json({ msg: 'Not Authorized' })
     }
   } catch (error) {
     console.log(error)
@@ -86,10 +80,10 @@ async function getMongoDBRecipe(req, res) {
   try {
     const recipe = await Recipe.findOne({ foodId: req.params.recipeId })
       .populate({
-        path: "comments",
+        path: 'comments',
         populate: {
-          path: "author",
-          model: "Profile"
+          path: 'author',
+          model: 'Profile'
         }
       })
     res.status(200).json(recipe)
