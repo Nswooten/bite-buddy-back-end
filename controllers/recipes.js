@@ -21,6 +21,7 @@ async function getRecipe(req, res) {
 
 async function createComment(req, res) {
   try {
+    
     req.body.author = req.user.profile
     const recipe = await Recipe.findOne({ foodId: req.params.recipeId })
     if (recipe) {
@@ -29,7 +30,7 @@ async function createComment(req, res) {
       const newComment = recipe.comments[recipe.comments.length - 1]
       const profile = await Profile.findById(req.user.profile)
       newComment.author = profile
-      res.status(201).json(recipe)
+      res.status(201).json(newComment)
     } else {
       const newRecipe = await Recipe.create(req.body)
       newRecipe.comments.push(req.body)
@@ -37,7 +38,9 @@ async function createComment(req, res) {
       const newComment = newRecipe.comments[newRecipe.comments.length - 1]
       const profile = await Profile.findById(req.user.profile)
       newComment.author = profile
-      res.status(201).json(newRecipe)
+    
+      
+      res.status(201).json(newComment)
     }
   } catch (error) {
     console.log(error)
@@ -52,7 +55,7 @@ async function deleteComment(req, res) {
     if (comment.author.equals(req.user.profile)) {
       recipe.comments.remove(req.params.commentId)
       await recipe.save()
-      res.status(200).json(recipe)
+      res.status(200).json(comment)
     } else {
       res.status(401).json({ msg: "Not Authorized" })
     }
