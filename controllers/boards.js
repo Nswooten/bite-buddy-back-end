@@ -41,7 +41,8 @@ async function create(req, res) {
 
 async function index(req, res) {
   try {
-    const boards = await Board.find({})
+    console.log('queerrryyy', req.query)
+    const boards = await Board.find(req.query.title ? req.query : {})
       .populate("author")
       .populate("recipes")
       .limit(10)
@@ -52,7 +53,8 @@ async function index(req, res) {
       }else{
         return board
       }
-    }))    
+    }))
+    console.log('boarrrrdsss with cover', boardsWithCover)
     res.status(200).json(boardsWithCover)
   } catch (error) {
     console.log(error)
