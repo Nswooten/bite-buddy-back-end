@@ -7,7 +7,7 @@ const profileSchema = new Schema({
   pronouns: String,
   photo: String,
   boards: [{ type: Schema.Types.ObjectId, ref: 'Board' }]
-},{
+}, {
   timestamps: true,
 })
 

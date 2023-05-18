@@ -65,7 +65,7 @@ async function changePassword(req, res) {
 
     const token = createJWT(user)
     res.json({ token })
-    
+
   } catch (err) {
     handleAuthError(err, res)
   }

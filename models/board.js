@@ -11,10 +11,10 @@ const boardSchema = new Schema({
   bgColor: {
     type: String,
     required: true,
-    enum: ['White', 'Gray', 'Cyan', 'Magenta']
+    enum: ['blue', 'gray', 'green', 'pink', 'purple']
   },
   recipes: [{ type: Schema.Types.ObjectId, ref: 'Recipe' }]
-},{
+}, {
   timestamps: true,
 })
 
