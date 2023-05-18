@@ -1,5 +1,5 @@
 
-# Bite Buddy
+# [Bite Buddy](https://bitebuddyapp.netlify.app/)
 Meet Bite Buddy, your new best friend in the kitchen! 
 
 Our platform lets you curate your own recipe boards, delve into mouth-watering culinary discoveries, and engage with a vibrant community of fellow food enthusiasts.
