@@ -10,9 +10,9 @@ Remember, Bite Buddy is more than an app - it's a community where each bite coun
 
 📚 [Here](https://trello.com/b/CC3qwYpm/bitebuddy "Trello Board") is the link to the planning materials on Trello
 
-⬅️  [Learn More about Bite Buddy](https://github.com/Nswooten/bite-buddy-back-end)
+⬅️  [Learn More about Bite Buddy](https://github.com/Nswooten/bite-buddy-front-end)
 
-## Made with ❤️ by Bite Buddies:
+## Made with 💚 by Bite Buddies:
 * [Nick Wooten](https://github.com/Nswooten)
 * [Eleah Burman](https://github.com/EleahBurman)
 * [Annie Kuxa](https://github.com/any-stone)
