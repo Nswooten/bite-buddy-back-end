@@ -137,8 +137,8 @@ async function addRecipeToBoard(req, res) {
 async function removeRecipeFromBoard(req, res) {
   try {
     const board = await Board.findById(req.params.boardId)
-    const recipe = await Recipe.findOne({ foodId: req.body.foodId })
-    board.recipes.remove({ _id: req.params.recipeId })
+    const recipe = await Recipe.findOne({ foodId: req.params.recipeId })
+    board.recipes.remove({ _id: recipe._id })
     await board.save()
     const savedBoard = await Board.findById(req.params.boardId).populate('recipes')
     res.status(201).json(savedBoard)
@@ -147,7 +147,6 @@ async function removeRecipeFromBoard(req, res) {
     res.status(500).json(error)
   }
 }
-
 
 
 export {
