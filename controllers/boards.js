@@ -41,7 +41,8 @@ async function create(req, res) {
 
 async function index(req, res) {
   try {
-    const boards = await Board.find(req.query.title ? req.query : {})
+    const search = {title: {$regex: req.query.title, $options: "i"}}
+    const boards = await Board.find(req.query.title ? search : {})
       .populate('author')
       .populate('recipes')
       .limit(10)
