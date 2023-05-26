@@ -3,15 +3,39 @@ import { Recipe } from '../models/recipe.js'
 
 const BASE_URL = 'https://api.edamam.com/api/recipes/v2'
 
+let keyNum = 0
+
+const keyLookUp = {
+  0: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID0, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY0 },
+  1: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID1, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY1 },
+  2: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID2, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY2 },
+  3: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID3, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY3 },
+  4: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID4, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY4 },
+  5: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID5, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY5 },
+  6: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID6, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY6 },
+  7: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID7, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY7 },
+  8: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID8, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY8 },
+  9: { EDAMAM_APP_ID: process.env.EDAMAM_APP_ID9, EDAMAM_API_KEY: process.env.EDAMAM_API_KEY9 },
+}
+
 async function getRecipesData(req, res) {
-  const apiResponse = await fetch(`${BASE_URL}?type=public&q=${req.query.q}&app_id=${process.env.EDAMAM_APP_ID8}&app_key=${process.env.EDAMAM_API_KEY8}`)
+  const apiResponse = await fetch(`${BASE_URL}?type=public&q=${req.query.q}&app_id=${keyLookUp[keyNum].EDAMAM_APP_ID}&app_key=${keyLookUp[keyNum].EDAMAM_API_KEY}`)
+  keyNum += 1
+  if (keyNum > 9) {
+    keyNum = 0
+  }
   const recipesData = await apiResponse.json()
   res.json(recipesData)
 }
 
 async function getRecipe(req, res) {
+  console.log('test')
   const recipeId = req.params.recipeId
-  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${process.env.EDAMAM_APP_ID9}&app_key=${process.env.EDAMAM_API_KEY9}`)
+  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=$${keyLookUp[keyNum].EDAMAM_APP_ID}&app_key=${keyLookUp[keyNum].EDAMAM_API_KEY}`)
+  keyNum += 1
+  if (keyNum > 9) {
+    keyNum = 0
+  }
   const recipe = await apiResponse.json()
   res.json(recipe)
 }
