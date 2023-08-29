@@ -25,13 +25,13 @@ async function getRecipesData(req, res) {
     keyNum = 0
   }
   const recipesData = await apiResponse.json()
+  console.log(recipesData)
   res.json(recipesData)
 }
 
 async function getRecipe(req, res) {
-  console.log('test')
   const recipeId = req.params.recipeId
-  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=$${keyLookUp[keyNum].EDAMAM_APP_ID}&app_key=${keyLookUp[keyNum].EDAMAM_API_KEY}`)
+  const apiResponse = await fetch(`${BASE_URL}/${recipeId}?type=public&app_id=${keyLookUp[keyNum].EDAMAM_APP_ID}&app_key=${keyLookUp[keyNum].EDAMAM_API_KEY}`)
   keyNum += 1
   if (keyNum > 9) {
     keyNum = 0
